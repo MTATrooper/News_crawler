@@ -189,6 +189,8 @@ class Dantri(scrapy.Spider):
         date = news.css("div.dt-news__header div.dt-news__meta span::text").extract_first()
         if date is None:
             date = news.css("span::text").extract_first()
+        if date is not None:
+            date = date.split(',')[1].strip().replace(' ','')
         return date
     
     def extract_author(self, response):

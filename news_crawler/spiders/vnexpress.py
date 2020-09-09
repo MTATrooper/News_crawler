@@ -199,6 +199,9 @@ class VnExpress(scrapy.Spider):
         date = news.css("div.header-content span::text").extract_first()
         if date is None:
             date = news.css("span::text").extract_first()
+        if date is not None:
+            date_split = date.split(',')
+            date = date_split[1].strip() + '-' + date_split[2].strip()[:5]
         return date
     
     def extract_author(self, response):

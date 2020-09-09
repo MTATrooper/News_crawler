@@ -5,8 +5,6 @@ News crawler là một công cụ giúp bạn có  crawl dữ liệu các websit
 
 ## Tác giả: 
 - [Nguyễn Phúc Lợi](https://github.com/nploi)
-## Edit:
-- [Phạm Đức Long](https://github.com/MTATrooper)
 
 #### Chức năng
 * Crawl theo website được tích hợp
@@ -16,7 +14,7 @@ News crawler là một công cụ giúp bạn có  crawl dữ liệu các websit
 
 #### Trang web được tích hợp vào để crawl
 * [VNEXPRESS](https://vnexpress.net/)
-* [Dân trí](https://dantri.com.vn/)
+* [BÁO MỚI](https://baomoi.com/)
 
 #### Chủ đề
 * Giáo dục
