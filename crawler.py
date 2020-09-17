@@ -3,40 +3,25 @@ import time
 import threading
 import requests
 from utils import load_json
-from pymongo import MongoClient
-from nltk import sent_tokenize
-from news_crawler.spiders.dantri import CATEGORIES as dantri_categories, URL as dantri_url
-from news_crawler.spiders.vnexpress import CATEGORIES as vnexpress_categories, URL as vnexpress_url
+from news_crawler.spiders.dantri import CATEGORIES as dantri_categories, URL as dantri_url, NAME as dantri_name
+from news_crawler.spiders.vnexpress import CATEGORIES as vnexpress_categories, URL as vnexpress_url, NAME as vnexpress_name
 
 pages = {'dantri': dantri_categories,
         'vnexpress': vnexpress_categories}
 urls = {'dantri': dantri_url,
         'vnexpress': vnexpress_url}
+fullnames = {'dantri': dantri_name,
+        'vnexpress': vnexpress_name}
 
 DATA_DIR = './data'
-client = MongoClient(port=27017)
-db=client.newspaper
 
 def insertDB(page):
     PAGE_DIR = os.path.join(DATA_DIR, page)
     for filename in os.listdir(PAGE_DIR):
         data = load_json(os.path.join(PAGE_DIR, filename))
         for news in data:
-            find = db.news.find_one({'link': news['link']})     #tìm xem link đã xuất hiện trong CSDL chưa
-            for row in news['content']:                         #Xóa tiêu đề ảnh lẫn trong bài viết
-                if row[-1] != '.':
-                    news['content'].remove(row)
-            content = ' '.join(news['content'])
-            sents = sent_tokenize(content)
-            if len(sents) != 0 and len(sents[-1].strip()) <= 30:    #Bỏ tên tác giả khỏi nội dung bài viết
-                sents.remove(sents[-1])
-            if len(sents) >= 5 and news['title'] is not None and news['date'] is not None and find is None:
-                news['content'] = sents
-                content = ' '.join(sents)
-                dic = {'text': content}
-                respond = requests.post('http://localhost:5555/summary', json=dic)
-                news['summary'] = respond.json()['key']
-                db.news.insert_one(news)
+            dic = {'news': news}
+            requests.post('http://localhost:5555/insertnews', json=dic)
 
 def crawl_data(pages):
     start = time.time()
@@ -56,14 +41,10 @@ def crawl_data(pages):
                 break
 if __name__ == '__main__':
     try:
-        for page in pages:
-            sources = { 'name': page, 
-                        'url': urls[page],
-                        'category': pages[page]
-                    }
-            find = db.source.find_one({'name': page})
-            if find is None:
-                db.source.insert_one(sources)
+        dic = {'pages': pages,
+                'urls': urls,
+                'fullnames': fullnames}
+        requests.post('http://localhost:5555/insertsource', json=dic)
         pages_1 = dict(list(pages.items())[:len(pages)//2])
         pages_2 = dict(list(pages.items())[len(pages)//2:])
         crawl_1 = threading.Thread(target=crawl_data, args=(pages_1,), daemon= True)

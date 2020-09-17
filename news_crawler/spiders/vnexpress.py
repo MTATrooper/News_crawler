@@ -9,6 +9,7 @@ from datetime import datetime
 import re
 
 URL = 'https://vnexpress.net/'
+NAME = 'VnExpress'
 
 # Hash table chưa tên chủ đề, để tạo thư mục
 CATEGORIES = {
