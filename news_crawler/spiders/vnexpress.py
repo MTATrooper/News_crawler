@@ -165,6 +165,7 @@ class VnExpress(scrapy.Spider):
 
         jsonData = {
             'source': 'vnexpress',
+            'sourceName': NAME,
             'category': self.category,
             'date': date,
             'title': title,
@@ -202,7 +203,8 @@ class VnExpress(scrapy.Spider):
             date = news.css("span::text").extract_first()
         if date is not None:
             date_split = date.split(',')
-            date = date_split[1].strip() + '-' + date_split[2].strip()[:5]
+            date_split2 = date_split[1].strip().split('/')
+            date = date_split2[2] + '/' + date_split2[1] + '/'+ date_split2[0] + ' ' + date_split[2].strip()[:5]
         return date
     
     def extract_author(self, response):

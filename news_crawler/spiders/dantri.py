@@ -152,6 +152,7 @@ class Dantri(scrapy.Spider):
 
         jsonData = {
             'source': self.name,
+            'sourceName': NAME,
             'category': self.category,
             'date': date,
             'title': title,
@@ -192,6 +193,9 @@ class Dantri(scrapy.Spider):
             date = news.css("span::text").extract_first()
         if date is not None:
             date = date.split(',')[1].strip().replace(' ','')
+            date2 = date.split('-')
+            date3 = date2[0].split('/')
+            date = date3[2] + '/' + date3[1] + '/' + date3[0] + ' ' + date2[1]
         return date
     
     def extract_author(self, response):
