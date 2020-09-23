@@ -35,7 +35,7 @@ def crawl_data(pages):
         # with open('log%s.txt' % list(pages.keys())[0], 'w') as f:
         #     f.writelines('page %s: %d' % (list(pages.keys())[0], int(time.time() - start)))
         while True:
-            if int(time.time() - start) % 300 == 0:
+            if int(time.time() - start) % 900 == 0:
                 for page in pages:
                     os.system('rm -r %s/%s'% (DATA_DIR, page))
                 break
