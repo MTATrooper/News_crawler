@@ -204,6 +204,8 @@ class VnExpress(scrapy.Spider):
         if date is not None:
             date_split = date.split(',')
             date_split2 = date_split[1].strip().split('/')
+            if len(date_split2[0]) == 1:
+                date_split2[0] = '0'+date_split2[0]
             if len(date_split2[1]) == 1:
                 date_split2[1] = '0'+date_split2[1]
             date = date_split2[2] + '/' + date_split2[1] + '/'+ date_split2[0] + ' ' + date_split[2].strip()[:5]
