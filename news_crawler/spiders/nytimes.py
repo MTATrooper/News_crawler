@@ -188,7 +188,7 @@ class NyTimes(scrapy.Spider):
             date = response.url[24:34]
             if date[:2] == 'es': date = response.url[27:37]
             try:
-                y = int(date[:4])
+                _ = int(date[:4])
             except ValueError:
                 date = None
         else:

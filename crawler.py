@@ -3,15 +3,22 @@ import time
 import threading
 import requests
 from utils import load_json
+from pymongo import MongoClient
 from news_crawler.spiders.dantri import CATEGORIES as dantri_categories, URL as dantri_url, NAME as dantri_name
 from news_crawler.spiders.vnexpress import CATEGORIES as vnexpress_categories, URL as vnexpress_url, NAME as vnexpress_name
+from news_crawler.spiders.nytimes import CATEGORIES as nytimes_categories, URL as nytimes_url, NAME as nytimes_name
 
-pages = {'dantri': dantri_categories,
+pages = {'nytimes': nytimes_categories,
+        'dantri': dantri_categories,
         'vnexpress': vnexpress_categories}
-urls = {'dantri': dantri_url,
+urls = {'nytimes': nytimes_url,
+        'dantri': dantri_url,
         'vnexpress': vnexpress_url}
-fullnames = {'dantri': dantri_name,
+fullnames = {'nytimes': nytimes_name,
+        'dantri': dantri_name,
         'vnexpress': vnexpress_name}
+client = MongoClient(port=27017)
+db=client.newspaper
 
 DATA_DIR = './data'
 
@@ -20,8 +27,10 @@ def insertDB(page):
     for filename in os.listdir(PAGE_DIR):
         data = load_json(os.path.join(PAGE_DIR, filename))
         for news in data:
-            dic = {'news': news}
-            requests.post('http://localhost:5555/insertnews', json=dic)
+            find = db.news.find_one({'link': news['link']})
+            if news['link'] is not None and find is None:
+                dic = {'news': news}
+                requests.post('http://localhost:5555/insertnews', json=dic)
 
 def crawl_data(pages):
     start = time.time()
