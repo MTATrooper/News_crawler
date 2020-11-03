@@ -221,6 +221,6 @@ class NyTimes(scrapy.Spider):
     
     def extract_image(self, response):
         news = response.css("article#story")
-        image = news.css("picture img::attr(data-src)").extract_first()
+        image = news.css("picture img::attr(src)").extract_first()
         
         return image
