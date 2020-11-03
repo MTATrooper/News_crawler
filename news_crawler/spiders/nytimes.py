@@ -193,24 +193,24 @@ class NyTimes(scrapy.Spider):
                 date = None
         else:
             month = {
-                'Jan.': 1,
-                'Feb.': 2,
-                'Mar.': 3,
-                'Apr.': 4,
-                'May.': 5,
-                'Jun.': 6,
-                'Jul.': 7,
-                'Aug.': 8,
-                'Sep.': 9,
-                'Oct.': 10,
-                'Nov.': 11,
-                'Dec.': 12
+                'Jan.': '01',
+                'Feb.': '02',
+                'Mar.': '03',
+                'Apr.': '04',
+                'May.': '05',
+                'Jun.': '06',
+                'Jul.': '07',
+                'Aug.': '08',
+                'Sep.': '09',
+                'Oct.': '10',
+                'Nov.': '11',
+                'Dec.': '12'
             }
             dd = date.split(' ')[1].replace(',','')
             if len(dd) == 1: dd = '0'+ dd
             mm = month[date.split(' ')[0]]
             yyyy = date.split(' ')[2].replace(',','')
-            date = yyyy + '/' + str(mm) + '/' + dd
+            date = yyyy + '/' + mm + '/' + dd
         return date
     
     def extract_author(self, response):
